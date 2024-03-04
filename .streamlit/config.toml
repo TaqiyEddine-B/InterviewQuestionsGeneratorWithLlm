@@ -3,3 +3,6 @@ runOnSave = true
 
 [browser]
 gatherUsageStats = false
+
+[theme]
+base="light"

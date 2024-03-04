@@ -1,14 +1,12 @@
 """ Main file for the project"""
-import os
 
 import streamlit as st
-
-from generator import Generator
 from dotenv import load_dotenv
+
+from src.generator import Generator
+
 load_dotenv()
-
-
-
+from src.utils import load_openai_key
 
 st.set_page_config(page_title="Interview Prep App", page_icon=":sunglasses:", layout="wide", initial_sidebar_state="expanded")
 
@@ -16,15 +14,7 @@ st.title("Interview Preparation App with Streamlit")
 st.write("This is a simple app to help you prepare for your next interview. It will compare your CV with the job description and give you a list of questions to prepare for.")
 
 
-openai_key = st.sidebar.text_input('OpenAI Key', '')
-if len(openai_key) > 0:
-    os.environ["OPENAI_API_KEY"] = openai_key
-else:
-    if 'OPENAI_API_KEY' not in os.environ:
-        st.error('No OpenAI Key')
-        st.stop()
-    else:
-        st.toast('Using OpenAI Key from .env')
+openai_key = load_openai_key()
 
 # read the md file
 with open("data/cv.md", "r") as file:
