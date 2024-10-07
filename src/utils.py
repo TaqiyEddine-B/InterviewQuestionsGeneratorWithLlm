@@ -16,6 +16,6 @@ def load_openai_key()->str:
             os.environ["OPENAI_API_KEY"] = key
             st.sidebar.success('Using the provided OpenAI Key')
         else:
-            st.error('No OpenAI Key')
+            st.sidebar.error('No OpenAI Key')
             st.stop()
     return key

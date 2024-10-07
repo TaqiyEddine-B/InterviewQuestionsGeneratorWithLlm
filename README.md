@@ -3,7 +3,7 @@ The demo is available at [this link](https://interviewquestionsgeneratorwithllm.
 
 # Introduction
 Here is an overview drawing of the application:
-![System Overview](docs/product.svg)
+![System Overview](docs/product.png)
 
 
 This is a screenshot of the application:
