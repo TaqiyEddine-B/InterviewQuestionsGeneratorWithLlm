@@ -20,17 +20,22 @@ openai_key = load_openai_key()
 with open("data/cv.md", "r") as file:
     cv_desc = file.read()
 
-with open("data/job.md", "r") as file:
-    job_desc = file.read()
-
+# with open("data/job.md", "r") as file:
+#     job_desc = file.read()
+job_desc=""
 
 col_cv, col_job, col_questions = st.columns(3)
 with col_cv:
     st.subheader("CV",divider ="green")
     st.markdown(cv_desc)
 with col_job:
-    st.subheader("Job Description",divider ="green")
-    st.markdown(job_desc)
+    st.subheader("Job Description", divider="green")
+    if st.button("Load an example"):
+        with open("data/job.md", "r") as file:
+            job_desc = file.read()
+        st.text_area("Enter your job description here", value=job_desc, height=800, key="updated_job_desc")
+    else:
+        job_desc = st.text_area("Enter your job description here", height=800)
 with col_questions:
     st.subheader("Questions",divider ="green")
     st.write("List of questions to prepare for")
