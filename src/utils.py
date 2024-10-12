@@ -17,7 +17,6 @@ def load_openai_key()->str:
     """
     key =""
     is_provided = False
-    st.write(st.secrets)
     if "OPENAI_API_KEY" in st.secrets.keys():
         key = st.secrets["OPENAI_API_KEY"]
         st.sidebar.success('Using OpenAI Key from sectrets.toml')
