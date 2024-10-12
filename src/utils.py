@@ -1,8 +1,6 @@
 """ Utils module for the Streamlit app."""
 
-import os
 import streamlit as st
-
 
 def load_openai_key()->str:
     """
@@ -19,14 +17,14 @@ def load_openai_key()->str:
     """
     key =""
     is_provided = False
-    if "OPENAI_API_KEY" in st.secrets :
+    st.write(st.secrets)
+    if "OPENAI_API_KEY" in st.secrets.keys():
         key = st.secrets["OPENAI_API_KEY"]
         st.sidebar.success('Using OpenAI Key from sectrets.toml')
         is_provided = True
     else:
         key = st.sidebar.text_input('Enter your OpenAI API key', type="password")
         if len(key) > 0:
-            os.environ["OPENAI_API_KEY"] = key
             st.sidebar.success('Using the provided OpenAI Key')
             is_provided = True
         else:
