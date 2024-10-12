@@ -9,7 +9,7 @@ from langchain_openai import ChatOpenAI
 
 class Generator:
     def __init__(self, data):
-        os.environ["OPENAI_API_KEY"] = st.secrets["openai_key"]
+        # os.environ["OPENAI_API_KEY"] = st.secrets["openai_key"]
 
         self.data = data
 
