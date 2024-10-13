@@ -11,60 +11,70 @@ st.set_page_config(page_title="Interview Prep App", page_icon=":)", layout="wide
 st.title("Interview Questions Generator")
 st.write("This app analyse the provided CV & job description and propose a list of pertinent questions to prepare an interview.")
 
-st.sidebar.info("""Get an OpenAI API key from https://platform.openai.com/api-keys, then you have two options: add it directly in the sidebar OR add it to the secrets section of the Streamlit app.""")
+
 openai_key,is_provided = load_openai_key()
+
+
 st.sidebar.divider()
-st.sidebar.link_button("GitHub", "https://github.com/TaqiyEddine-B/InterviewQuestionsGeneratorWithLlm")
+st.sidebar.subheader("Steps")
+st.sidebar.write("1. Enter your OpenAI API key")
+st.sidebar.info("""Get an OpenAI API key from https://platform.openai.com/api-keys, then you have two options: add it directly in the sidebar OR add it to the secrets section of the Streamlit app.""")
+
+st.sidebar.write("2. Enter your CV")
+st.sidebar.write("3. Enter the job description")
+st.sidebar.write("4. Click on 'Generate Questions'")
+
+
+st.sidebar.divider()
+
+st.sidebar.subheader("About")
+st.sidebar.link_button("GitHub Repo of the project", "https://github.com/TaqiyEddine-B/InterviewQuestionsGeneratorWithLlm")
+st.sidebar.link_button("My website", "https://taqiyeddine.com")
 
 if 'cv_desc' not in st.session_state:
-    st.session_state.cv_desc = ""
+    with open("data/cv.md", "r") as file:
+        st.session_state.cv_desc =  file.read()
 if 'job_desc' not in st.session_state:
-    st.session_state.job_desc = ""
+    with open("data/job.md", "r") as job_file:
+        st.session_state.job_desc =  job_file.read()
 
-
-col_cv, col_job, col_questions = st.columns(3)
+height = 800
+col_cv, col_job, col_questions = st.columns([1, 1, 1.5])
 with col_cv:
-    st.subheader("CV",divider ="green")
+    st.subheader("CV",divider ="blue")
     with st.container():
         @st.fragment
-        def fragment_function():
-            if st.button("Load an example", key="load_cv"):
-                with open("data/cv.md", "r") as file:
-                    st.session_state.cv_desc =  file.read()
-
-                st.session_state.cv_desc = st.text_area("Enter your CV here", value=st.session_state.cv_desc, height=800, key="updated_cv_desc")
-            else:
-                st.session_state.cv_desc =  st.text_area("Enter your CV here", height=800)
-        fragment_function()
+        def update_cv_text_area():
+            """Update the text area of the CV"""
+            st.session_state.cv_desc =  st.text_area("Enter your CV here", value=st.session_state.cv_desc, height=height)
+        update_cv_text_area()
 with col_job:
-    st.subheader("Job Description", divider="green")
+    st.subheader("Job Description", divider="blue")
     with st.container():
         @st.fragment
-        def fragment_job():
-            if st.button("Load an example", key="load_job"):
-                with open("data/job.md", "r") as file:
-                    st.session_state.job_desc = file.read()
-                st.text_area("Enter your job description here", value=st.session_state.job_desc, height=800, key="updated_job_desc")
-            else:
-                st.session_state.job_desc = st.text_area("Enter your job description here", height=800)
-        fragment_job()
+        def update_job_description():
+            """Update the text area of the job description"""
+            st.text_area("Enter your job description here", value=st.session_state.job_desc, height=height, key="updated_job_desc")
+
+        update_job_description()
 with col_questions:
     st.subheader("Generated Questions",divider ="green")
-
-    @st.fragment
-    def fragment_questions():
-        if st.button("Generate Questions", key="generate_questions"):
-            if is_provided:
-                data = {"cv": st.session_state.cv_desc, "job": st.session_state.job_desc}
-                if len(st.session_state.cv_desc) == 0:
-                    st.error("Please enter your CV")
-                elif len(st.session_state.job_desc) == 0:
-                    st.error("Please enter the job description")
+    with st.container(border=True,height=height+32):
+        @st.fragment
+        def generate_questions_fragment():
+            """Generate questions"""
+            if st.button("Generate Questions", key="generate_questions"):
+                if is_provided:
+                    data = {"cv": st.session_state.cv_desc, "job": st.session_state.job_desc}
+                    if len(st.session_state.cv_desc) == 0:
+                        st.error("Please enter your CV")
+                    elif len(st.session_state.job_desc) == 0:
+                        st.error("Please enter the job description")
+                    else:
+                        gen = Generator(data=data,key=openai_key)
+                        questions = gen.generate()
+                        st.write(questions)
                 else:
-                    gen = Generator(data=data)
-                    questions = gen.generate()
-                    st.write(questions)
-            else:
-                st.error("Please enter your OpenAI key")
+                    st.error("Please enter your OpenAI key")
 
-    fragment_questions()
+        generate_questions_fragment()
