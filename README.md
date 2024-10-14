@@ -1,5 +1,5 @@
 This application aims to generate relevant interview questions based on a CV and job description.
-The demo is available at [this link](https://interviewquestionsgeneratorwithllm.streamlit.app/).
+The demo is available at [this link](https://interviewquestionsgeneratorwithllm.onrender.com).
 
 # Introduction
 Here is an overview drawing of the application:
