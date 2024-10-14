@@ -6,7 +6,7 @@ from src.generator import Generator
 
 from src.utils import load_openai_key
 
-st.set_page_config(page_title="Interview Prep App", page_icon=":)", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Interview Questions Generator", page_icon="📋", layout="wide", initial_sidebar_state="expanded")
 
 st.title("Interview Questions Generator")
 st.write("This app analyse the provided CV & job description and propose a list of pertinent questions to prepare an interview.")
